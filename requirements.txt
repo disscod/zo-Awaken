@@ -1,0 +1,5 @@
+# 自动化测试与浏览器控制核心依赖
+seleniumbase>=4.20.0
+
+# 绕过 Cloudflare 等反爬验证的增强驱动（由 seleniumbase 自动调用，但需要保持 requests 支持）
+requests>=2.31.0
