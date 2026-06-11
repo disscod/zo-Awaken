@@ -92,28 +92,32 @@ print("📸 快照已保存: zo_commands_done.png")
 print("✅ 所有终端命令执行完毕")
 
 # 5. 发送 Telegram 通知
-tg_bot_token = os.getenv("TG_BOT")
+tg_bot_env = os.getenv("TG_BOT")
 
-# 📢 注意：请在 GitHub Secrets 中额外添加一个名为 TG_CHAT_ID 的变量，填入你的电报数字 ID
-tg_chat_id = os.getenv("TG_CHAT_ID") 
-
-if tg_bot_token and tg_chat_id:
-    import requests
-    url = f"https://api.telegram.org/bot{tg_bot_token}/sendMessage"
-    payload = {
-        "chat_id": tg_chat_id,
-        "text": "🤖 Zo Computer 唤醒脚本执行完毕！终端命令已全部处理完成。"
-    }
+if tg_bot_env and "," in tg_bot_env:
     try:
+        import requests
+        
+        # 使用英文逗号 , 切割出 Token 和 Chat ID，并去掉可能存在的空格
+        tg_bot_token, tg_chat_id = [item.strip() for item in tg_bot_env.split(",", 1)]
+        
+        url = f"https://api.telegram.org/bot{tg_bot_token}/sendMessage"
+        payload = {
+            "chat_id": tg_chat_id,
+            "text": "🤖 Zo Computer 唤醒脚本执行完毕！终端命令已全部处理完成。"
+        }
+        
         response = requests.post(url, json=payload, timeout=10)
         if response.status_code == 200:
             print("📬 TG推送成功")
         else:
             print(f"❌ TG推送失败，电报服务器返回状态码: {response.status_code}")
+            
     except Exception as e:
-        print(f"❌ TG推送网络请求出错: {e}")
+        print(f"❌ TG推送运行出错: {e}")
 else:
-    print("⚠️ 未配置 TG_BOT 或 TG_CHAT_ID 键，跳过通知")
+    print("⚠️ TG_BOT 格式不正确（未包含逗号分割的 Chat ID）或未配置，跳过通知")
+
 
 
 # 关闭浏览器
