@@ -93,12 +93,28 @@ print("✅ 所有终端命令执行完毕")
 
 # 5. 发送 Telegram 通知
 tg_bot_token = os.getenv("TG_BOT")
-if tg_bot_token:
-    # 这里可以编写发送 TG 消息的代码
-    # requests.post(f"https://api.telegram.org/bot{tg_bot_token}/sendMessage", data={...})
-    print("📬 TG推送成功")
+
+# 📢 注意：请在 GitHub Secrets 中额外添加一个名为 TG_CHAT_ID 的变量，填入你的电报数字 ID
+tg_chat_id = os.getenv("TG_CHAT_ID") 
+
+if tg_bot_token and tg_chat_id:
+    import requests
+    url = f"https://api.telegram.org/bot{tg_bot_token}/sendMessage"
+    payload = {
+        "chat_id": tg_chat_id,
+        "text": "🤖 Zo Computer 唤醒脚本执行完毕！终端命令已全部处理完成。"
+    }
+    try:
+        response = requests.post(url, json=payload, timeout=10)
+        if response.status_code == 200:
+            print("📬 TG推送成功")
+        else:
+            print(f"❌ TG推送失败，电报服务器返回状态码: {response.status_code}")
+    except Exception as e:
+        print(f"❌ TG推送网络请求出错: {e}")
 else:
-    print("⚠️ 未配置 TG_BOT 密钥，跳过推送")
+    print("⚠️ 未配置 TG_BOT 或 TG_CHAT_ID 键，跳过通知")
+
 
 # 关闭浏览器
 driver.quit()
