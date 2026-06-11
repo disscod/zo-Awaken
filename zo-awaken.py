@@ -57,13 +57,13 @@ print("🔗 打开登录链接...")
 # 4. 唤醒与终端操作
 print("⏳ 等待 Zo Computer 启动...")
 time.sleep(5) 
-print("✅ Zo Computer 启动完成! 域名: socks5.zo.computer")
+print("✅ Zo Computer 启动完成! 域名: kano.zo.computer")
 
 # 保存快照 1
 driver.save_screenshot("zo_booted.png")
 print("📸 快照已保存: zo_booted.png")
 
-print("🖥️ 打开终端: https://socks5.zo.computer/?t=terminal")
+print("🖥️ 打开终端: https://kano.zo.computer/?t=terminal")
 print("⏳ 等待终端就绪...")
 time.sleep(3)
 print("✅ 终端已就绪")
